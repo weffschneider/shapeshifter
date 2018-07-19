@@ -22,35 +22,27 @@ classdef AList < handle
             
             for i = 1:width
                 for j = 1:height
-                    hood = zeros(numNeighbors, 5); % the neighborhood
-                    % [x y cost time energy]
+                    hood = zeros(numNeighbors, 3); % the neighborhood
+                    % [x y cost]
                     
                     % NOTE: the directions are wrong, but it doesn't matter
                     hood(N, 1:2) = [i, wrapY(j+1)];
-                    [c, t, e] = cost_fn([i,j], hood(N,1:2));
-                    hood(N, 3:5) = [c, t, e];
+                    hood(N, 3) = cost_fn([i,j], hood(N,1:2));
                     hood(NE, 1:2) = [wrapX(i+1), wrapY(j+1)];
-                    [c, t, e] = cost_fn([i,j], hood(NE,1:2));
-                    hood(NE, 3:5) = [c, t, e];
+                    hood(NE, 3) = cost_fn([i,j], hood(NE,1:2));
                     hood(E, 1:2) = [wrapX(i+1), j];
-                    [c, t, e] = cost_fn([i,j], hood(E,1:2));
-                    hood(E, 3:5) = [c, t, e];
+                    hood(E, 3) = cost_fn([i,j], hood(E,1:2));
                     hood(SE, 1:2) = [wrapX(i+1), wrapY(j-1)];
-                    [c, t, e] = cost_fn([i,j], hood(SE,1:2));
-                    hood(SE, 3:5) = [c, t, e];
+                    hood(SE, 3) = cost_fn([i,j], hood(SE,1:2));
                     
                     hood(S, 1:2) = [i, wrapY(j-1)];
-                    [c, t, e] = cost_fn([i,j], hood(S,1:2));
-                    hood(S, 3:5) = [c, t, e];
-                     hood(SW, 1:2) = [wrapX(i-1), wrapY(j-1)];
-                    [c, t, e] = cost_fn([i,j], hood(SW,1:2));
-                    hood(SW, 3:5) = [c, t, e];
-                     hood(W, 1:2) = [wrapX(i-1), j];
-                    [c, t, e] = cost_fn([i,j], hood(W,1:2));
-                    hood(W, 3:5) = [c, t, e];
-                     hood(NW, 1:2) = [wrapX(i-1), wrapY(j+1)];
-                     [c, t, e] = cost_fn([i,j], hood(NW,1:2));
-                    hood(NW, 3:5) = [c, t, e];
+                    hood(S, 3) = cost_fn([i,j], hood(S,1:2));
+                    hood(SW, 1:2) = [wrapX(i-1), wrapY(j-1)];
+                    hood(SW, 3) = cost_fn([i,j], hood(SW,1:2));
+                    hood(W, 1:2) = [wrapX(i-1), j];
+                    hood(W, 3) = cost_fn([i,j], hood(W,1:2));
+                    hood(NW, 1:2) = [wrapX(i-1), wrapY(j+1)];
+                    hood(NW, 3) = cost_fn([i,j], hood(NW,1:2));
                     
                     obj.theList{i, j} = hood;
                 end

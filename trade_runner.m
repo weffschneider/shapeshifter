@@ -18,13 +18,10 @@ alpha = 0.1;
 alist = AList;
 
 initialize(alist, titan_dem, ...
-    @(a, b) heuristic(robot, @trade_cost, titan_dem, a, b, endpt, alpha));
+    @(a, b) heuristic(@trade_cost, titan_dem, a, b, endpt));
 
 % dijkstras
-[shortest_path, time, energy] = disjkstras(alist, startpt, endpt);
-
-disp(['total time: ', num2str(time)]);
-disp(['total energy: ', num2str(energy)]);
+[shortest_path] = disjkstras(alist, startpt, endpt);
 
 % output: speed, energy used, some kind of graph?
 % % Plot DEM
@@ -37,8 +34,8 @@ plot(startpt(2), startpt(1), 'gs');
 plot(endpt(2), endpt(1), 'gp');
 plot(shortest_path(:,2), shortest_path(:,1), 'r-.');
 
-function [cost, time, energy] = heuristic(robot, cost_fn, titan_dem, node1, node2, goal, alpha)
-    [g, time, energy] = cost_fn(robot, titan_dem, node1, node2, alpha);
+function [cost] = heuristic(cost_fn, titan_dem, node1, node2, goal)
+    g = cost_fn(titan_dem, node1, node2);
     titan_radius = 2575e3; % m
     h = great_circle(titan_dem, titan_radius, node1, goal);
     cost = g + h/100;

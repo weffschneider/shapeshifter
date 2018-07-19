@@ -1,5 +1,4 @@
 % extract elevation data 
-addpath('dem');
 fileID = fopen('titan_elevation_detailed.txt', 'r');
 sizeA = [1440 720];
 A = fscanf(fileID, '%f', sizeA);

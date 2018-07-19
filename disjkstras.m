@@ -1,15 +1,14 @@
-function [path, total_time, total_energy] = disjkstras(alist, startpt, endpt)
-    visited = inf*ones(180*360, 7); % [toX toY fromX fromY cost time energy]
-    visited(1, :) = [startpt, nan, nan, 0, 0, 0];
+function [path] = disjkstras(alist, startpt, endpt)
+    visited = inf*ones(180*360, 5); % [toX toY fromX fromY cost]
+    visited(1, :) = [startpt, nan, nan, 0];
     vIdx = 2;
         
     node = startpt;
     cost = 0;
-    time = 0;
-    energy = 0;
+
     
-    G = zeros(180*360, 6);
-    G(1,:) = [startpt nan nan 0 0]; % [to from time energy];
+    G = zeros(180*360, 4);
+    G(1,:) = [startpt nan nan]; % [to from];
     gIdx = 2;
     
     while ~isequal(node, endpt)
@@ -19,9 +18,7 @@ function [path, total_time, total_energy] = disjkstras(alist, startpt, endpt)
             if isempty(visited(loc))
                 % node has never been visited
                 new_cost = neighbors(n,3) + cost;
-                new_time = neighbors(n,4) + time;
-                new_energy = neighbors(n,5) + energy;
-                visited(vIdx,:) = [neighbors(n,1:2) node new_cost new_time new_energy];
+                visited(vIdx,:) = [neighbors(n,1:2) node new_cost];
                 vIdx = vIdx + 1;
             elseif ~isinf(visited(loc,5))
                 % we have been to this neighbor before, and haven't added
@@ -29,9 +26,7 @@ function [path, total_time, total_energy] = disjkstras(alist, startpt, endpt)
                 old_cost = visited(loc,5); % old cost to get to neighbor n
                 new_cost = cost + neighbors(n,3); % cost to get to neighbor n through node
                 if new_cost < old_cost
-                    new_time = neighbors(n,4) + time;
-                    new_energy = neighbors(n,5) + energy;
-                    visited(loc,3:7) = [node new_cost new_time new_energy];
+                    visited(loc,3:5) = [node new_cost];
                 end
             %else
                 % this neighbor is already in the graph; ignore
@@ -45,12 +40,10 @@ function [path, total_time, total_energy] = disjkstras(alist, startpt, endpt)
         % update
         node = next_node;
         cost = visited(i,5);
-        time = visited(i,6);
-        energy = visited(i,7);
         visited(i,5) = inf; % don't keep using the same nodes
         
         % add node -> new node to graph (with new node's cost?)
-        G(gIdx,:) = [node visited(i, 3:4) time energy];
+        G(gIdx,:) = [node visited(i, 3:4)];
         gIdx = gIdx + 1;
                 
     end
@@ -59,13 +52,9 @@ function [path, total_time, total_energy] = disjkstras(alist, startpt, endpt)
     path = zeros(100, 2);
     path(1, :) = node;
     pIdx = 2;
-    total_time = 0;
-    total_energy = 0;
     while ~isequal(node, startpt)
         edge = G(ismember(G(:,1:2), node, 'rows'), :);
         node = edge(3:4);
-        total_time = total_time + edge(5);
-        total_energy = total_energy + edge(6);
         
         path(pIdx, :) = node;
         pIdx = pIdx + 1;
