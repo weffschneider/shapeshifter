@@ -3,7 +3,7 @@ classdef AList < handle
         theList
     end
     methods
-        function initialize(obj, titan_dem, cost_fn)
+        function initialize(obj, titan_dem, max_slope, cost_fn)
             
             N = 1;
             NE = 2;
@@ -52,16 +52,6 @@ classdef AList < handle
         function neighbors = getNeighbors(obj, node)
            neighbors = obj.theList{node(1), node(2)};
         end
-        
-%         function weight = getWeight(obj, nodeA, nodeB)
-%             neighbors = getNeighbors(obj, nodeA);
-%             match = neighbors(ismember(neighbors(:,1:2), nodeB, 'rows'),:);
-%             if isempty(match)
-%                 weight = inf;
-%             else
-%                 weight = match(3);  
-%             end
-%         end
     end
 end
 

@@ -1,13 +1,13 @@
 % extract elevation data 
-fileID = fopen('titan_elevation_detailed.txt', 'r');
-sizeA = [1440 720];
+fileID = fopen('titan_elevation.txt', 'r');
+sizeA = [360 180];
 A = fscanf(fileID, '%f', sizeA);
 A = A';
 
-R= 10000; % 2575e3;
+R= 2575e3;
 % use radius = 10km so we can see something
-lon=linspace(-pi,pi,1440);
-lat=linspace(-pi/2,pi/2,720);
+lon=linspace(-pi,pi,sizeA(1));
+lat=linspace(-pi/2,pi/2,sizeA(2));
 [lon,lat]=meshgrid(lon,lat);
 [X,Y,Z]=sph2cart(lon,lat,R + A);
 
@@ -54,11 +54,11 @@ c.Label.String = 'Slope (degrees)';
 title('Slope Map');
 axis equal;
 
-% figure;
-% surf(X, Y, Z, (slope > 10) + 1, 'linestyle', 'none');
-% title('Slope < 10\circ'); axis equal;
-% colorbar('Ticks',[1, 2], 'TickLabels',{'< 10\circ','> 10\circ'});
-%    
+figure;
+surf(rad2deg(lon), rad2deg(lat), (slope > 0.05) + 1, 'linestyle', 'none'); view(2);
+title('Slope < 10\circ'); axis equal;
+colorbar('Ticks',[1, 2], 'TickLabels',{'< 10\circ','> 10\circ'});
+   
 % figure;
 % surf(X, Y, Z, (slope > 20) + 1, 'linestyle', 'none');
 % title('Slope < 20\circ'); axis equal;

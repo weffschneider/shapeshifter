@@ -20,7 +20,7 @@ function [path] = disjkstras(alist, startpt, endpt)
                 new_cost = neighbors(n,3) + cost;
                 visited(vIdx,:) = [neighbors(n,1:2) node new_cost];
                 vIdx = vIdx + 1;
-            elseif ~isinf(visited(loc,5))
+            elseif ~isnan(visited(loc,5))
                 % we have been to this neighbor before, and haven't added
                 % it to the graph yet
                 old_cost = visited(loc,5); % old cost to get to neighbor n
@@ -36,11 +36,15 @@ function [path] = disjkstras(alist, startpt, endpt)
         % find next best node: min cost from visited(_,3)
         [~, i] = min(visited(:,5));
         next_node = visited(i, 1:2);
+        
+        if isnan(visited(i,5)) || isinf(visited(i,5))
+            break;
+        end
 
         % update
         node = next_node;
         cost = visited(i,5);
-        visited(i,5) = inf; % don't keep using the same nodes
+        visited(i,5) = nan; % don't keep using the same nodes
         
         % add node -> new node to graph (with new node's cost?)
         G(gIdx,:) = [node visited(i, 3:4)];
