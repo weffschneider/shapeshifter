@@ -1,5 +1,5 @@
-function [path] = disjkstras(alist, startpt, endpt)
-    visited = inf*ones(180*360, 5); % [toX toY fromX fromY cost]
+function [path] = disjkstras(alist, startpt, endpt, numnodes)
+    visited = inf*ones(numnodes, 5); % [toX toY fromX fromY cost]
     visited(1, :) = [startpt, nan, nan, 0];
     vIdx = 2;
         
@@ -7,7 +7,7 @@ function [path] = disjkstras(alist, startpt, endpt)
     cost = 0;
 
     
-    G = zeros(180*360, 4);
+    G = zeros(numnodes, 4);
     G(1,:) = [startpt nan nan]; % [to from];
     gIdx = 2;
     
@@ -38,7 +38,8 @@ function [path] = disjkstras(alist, startpt, endpt)
         next_node = visited(i, 1:2);
         
         if isnan(visited(i,5)) || isinf(visited(i,5))
-            break;
+            path = [];
+            return;
         end
 
         % update
@@ -64,6 +65,6 @@ function [path] = disjkstras(alist, startpt, endpt)
         pIdx = pIdx + 1;
     end
     
-    path = path(1:pIdx-1,:);
+    path = flipud(path(1:pIdx-1,:));
     
 end

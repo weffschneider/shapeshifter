@@ -33,19 +33,20 @@ lat=linspace(0,40,41);
 [lon,lat]=meshgrid(lon,lat);
 
 figure;
-surf(lon, lat, titan_dem, 'linestyle', 'none'); view(2);
+surf(lon, lat, titan_dem, 'linestyle', 'none'); 
 set(gca, 'YDir','reverse')
 c = colorbar;
 c.Label.String = 'Elevation (meters)';
 
 hold on;
 plot3(startpt(2), startpt(1), titan_dem(startpt(2), startpt(1)), 'rs');
-plot3(endpt(2), endpt(1), titan_dem(endpt(2), endpt(1)), 'rp');
+plot3(endpt(2), endpt(1), titan_dem(startpt(2), startpt(1)), 'rp');
 height = zeros(1, size(shortest_path, 1));
+for i=1:size(shortest_path,1)
+    height(i) = titan_dem(shortest_path(i,2), shortest_path(i,1));
 if ~isempty(shortest_path)
-    % TODO: fix 3D version of this
     plot3(shortest_path(:,2), shortest_path(:,1),...
-        titan_dem(shortest_path(:,2), shortest_path(:,1)), 'r.');
+        titan_dem(shortest_path(:,2), shortest_path(:,1)), 'r-.');
 else
     disp('no path found');
 end

@@ -3,7 +3,7 @@ classdef AList < handle
         theList
     end
     methods
-        function initialize(obj, titan_dem, max_slope, cost_fn)
+        function initialize(obj, titan_dem, cost_fn)
             
             N = 1;
             NE = 2;
@@ -55,24 +55,39 @@ classdef AList < handle
     end
 end
 
-% "X" = latitude
+% TODO: this should not wrap around
 function wrapped = wrapX(x)
-    if (x > 180)
-        wrapped = x-180;
+    if (x > 41)
+        wrapped = x-41;
     elseif (x < 1)
-        wrapped = x+180;
+        wrapped = x+41;
     else
         wrapped = x;
     end
 end
 
-% "Y" = longitude
 function wrapped = wrapY(y)
-    if (y > 360)
-        wrapped = y-360;
-    elseif (y < 1)
-        wrapped = y+360;
-    else
-        wrapped = y;
-    end
+    wrapped = wrapX(y);
 end
+
+% % "X" = latitude
+% function wrapped = wrapX(x)
+%     if (x > 180)
+%         wrapped = x-180;
+%     elseif (x < 1)
+%         wrapped = x+180;
+%     else
+%         wrapped = x;
+%     end
+% end
+% 
+% % "Y" = longitude
+% function wrapped = wrapY(y)
+%     if (y > 360)
+%         wrapped = y-360;
+%     elseif (y < 1)
+%         wrapped = y+360;
+%     else
+%         wrapped = y;
+%     end
+% end

@@ -1,3 +1,3 @@
 % define start and end point of target trajectory
-startpt = [170, 151];
-endpt = [160, 167];
+startpt = [10, 12];
+endpt = [30, 32];
