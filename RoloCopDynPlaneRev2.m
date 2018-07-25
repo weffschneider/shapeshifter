@@ -1,10 +1,10 @@
-clc, clear all, close all
+clc, close all
 format long
 beep off
 
 P.r = 1;
 P.m = 1;
-P.sg = 9.81; % m/s2
+P.sg = 9.81;
 
 save('P', 'P');
 clearvars
@@ -16,7 +16,7 @@ load('P')
 r = P.r;
 m = P.m;
 sg = P.sg;
-f = 0.01; %.1*y^2;
+f = y;
 matlabFunction(f, 'Vars', y, 'File', 'Func');
 fdot = diff(f, y)*ydot;
 fddot = diff(fdot, ydot)*yddot + diff(fdot, y)*ydot;
@@ -60,9 +60,9 @@ N_Ff = sFf*N_lam; % tangent force
 N_g = [0 0 -sg].'; % gravitational force
 
 %% Angular Momentum Ballance
-applied_torque = 1; % Nm?
-N_Ho = N_Icm*N_aB_N + cross(N_rcm_o, N_acm_o) + applied_torque;
-N_Tto = cross(N_rcm_o, m*N_g) + cross(N_rc_o, N_Fn) + cross(N_rc_o, N_Ff); % array of torque about origin (not center of mass)
+
+N_Ho = N_Icm*N_aB_N + cross(N_rcm_o, N_acm_o);
+N_Tto = cross(N_rcm_o, m*N_g) + cross(N_rc_o, N_Fn) + cross(N_rc_o, N_Ff)-7; % array of torque about origin (not center of mass)
 
 Eq1 = N_Ho(1) == N_Tto(1);
 
@@ -130,41 +130,56 @@ N_n = zeros(3, length(t));
 N_lam = N_n;
 
 for i = 1:length(t)
-   [~, sFn(i), sFf(i), C1(i), C2(i)] = RoloCop2DDynFunc(t(i), S(i,:).');
+   [Sdot_out, sFn(i), sFf(i), C1(i), C2(i)] = RoloCop2DDynFunc(t(i), S(i,:).');
    N_n(:,i) = N_nFunc(S(i,1));
    N_lam(:,i) =  N_lamFunc(S(i,1));
+   Sdot_out_all(:,i) = Sdot_out;
+   linear_acc(:,i) = sqrt(Sdot_out(2)^2+Sdot_out(4)^2);
+   omega(:,i) = Sdot_out(5);
+   alpha(:,i) = Sdot_out(end);
     
 end
 
 figure()
-plot(S(:,1), S(:,3), 'y')
+plot(S(:,1), S(:,3))
 hold on
 plot(linspace(-1.5*max(abs(S(:,1))), 1.5*max(abs(S(:,1))), 100), Func(linspace(-1.5*max(abs(S(:,1))), 1.5*max(abs(S(:,1))), 100)));
-plot(S(1,1), S(1,3), 'gs')
-plot(S(end,1), S(end,3), 'gx')
+plot(S(1,1), S(1,3), 'o')
+plot(S(end,1), S(end,3), '*')
 
 
-for i = 1:30:length(N_n(1,:))
+for i = 1:10:length(N_n(1,:))
     plot([S(i,1), S(i,1)+N_n(2, i)],[S(i,3), S(i,3)+N_n(3, i)], 'Color', 'red')
     plot([S(i,1), S(i,1)+N_lam(2, i)],[S(i,3), S(i,3)+N_lam(3, i)], 'Color', 'blue')
 end
 
-figure;
-plot(t, sqrt(S(:,2).^2 + S(:,4).^2))
-% axis([-20 20 -20 20])
-% 
+axis([-20 20 -20 20])
+
 % hold off
-% 
+
 % figure()
 % plot(t, sFn)
-% 
-figure()
-plot(t, sFf)
+% title('normal force')
 % 
 % figure()
+% plot(t, sFf)
+% title('friction force')
+% figure()
 % plot(t, C1)
+% title('First constraint violation')
+% 
 % 
 % figure()
 % plot(t, C2)
+% title('Second constraint violation')
+% 
+figure()
+plot(t, linear_acc)
+title('Linear Acceleration')
+
+
+figure()
+plot(t, omega)
+title('Angular Velocity')
 
 
