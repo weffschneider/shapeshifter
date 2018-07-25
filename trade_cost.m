@@ -3,15 +3,9 @@ function [cost] = trade_cost(titan_dem, nodeA, nodeB, max_slope)
 titan_radius = 2575e3; % m
 dist = great_circle(titan_dem, titan_radius, nodeA, nodeB);
 
-time = dist/robot.max_speed;
-energy = robot.power*time;
-
 elev1 = titan_dem(nodeA(1), nodeA(2));
 elev2 = titan_dem(nodeB(1), nodeB(2));
 slope = abs(elev1-elev2)/dist;
-
-cost = alpha*time + (1-alpha)*energy;
-
 
 if atan(slope) > max_slope
     cost = inf;

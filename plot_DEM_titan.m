@@ -7,7 +7,6 @@ A = flipud(A');
 A = A(420:460, 1260:1300);
 
 R= 2575e3;
-% use radius = 10km so we can see something
 % lon=linspace(-pi,pi,sizeA(1));
 % lat=linspace(-pi/2,pi/2,sizeA(2));
 lon=linspace(10,20,41);
@@ -59,9 +58,9 @@ c.Label.String = 'Slope (degrees)';
 % axis equal;
 
 figure;
-surf(rad2deg(lon), rad2deg(lat), (slope > .2) + 1, 'linestyle', 'none'); view(2);
+surf(X, Y, (slope > .2) + 1, 'linestyle', 'none'); view(2);
 title('Slope < 0.2\circ'); axis equal;
-colorbar('Ticks',[1, 2], 'TickLabels',{'< 10\circ','> 10\circ'});
+colorbar('Ticks',[1, 2], 'TickLabels',{'< 0.2\circ','> 0.2\circ'});
    
 % figure;
 % surf(X, Y, Z, (slope > 20) + 1, 'linestyle', 'none');

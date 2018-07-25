@@ -1,6 +1,7 @@
 % wheeled rover specs for trade study
 robot.max_slope = deg2rad(0.5); % rad
-robot.max_speed = 0.025; % m/s
+robot.speed = 0.025; % m/s
 robot.power = 56; % W
 
-% TODO: energy as a function of speed?
+robot.speed_max_endurance = robot.speed;
+robot.speed_max_range = robot.speed;

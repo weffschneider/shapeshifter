@@ -40,15 +40,22 @@ c.Label.String = 'Elevation (meters)';
 
 hold on;
 plot3(startpt(2), startpt(1), titan_dem(startpt(2), startpt(1)), 'rs');
-plot3(endpt(2), endpt(1), titan_dem(endpt(2), endpt(1)), 'rp');
+plot3(endpt(2), endpt(1), titan_dem(endpt(2), endpt(1))+10, 'rp');
 height = zeros(1, size(shortest_path, 1));
 if ~isempty(shortest_path)
+    for i = 1:length(shortest_path(:,1))
+        height(i) = titan_dem(shortest_path(i,1), shortest_path(i,2));
+    end
     % TODO: fix 3D version of this
-    plot3(shortest_path(:,2), shortest_path(:,1),...
-        titan_dem(shortest_path(:,2), shortest_path(:,1)), 'r.');
+%     plot3(shortest_path(:,2), shortest_path(:,1),...
+%         titan_dem(shortest_path(:,2), shortest_path(:,1)), 'r.-');
+%     
+    plot3(shortest_path(:,2), shortest_path(:,1),height+20, 'r.-');
+
 else
     disp('no path found');
 end
+
 
 function [cost] = heuristic(cost_fn, titan_dem, node1, node2, goal, robot)
     g = cost_fn(titan_dem, node1, node2, robot.max_slope);
