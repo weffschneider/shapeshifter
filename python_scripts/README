@@ -1,0 +1,6 @@
+For use in determining power consumption of a quadcopter as in:
+https://groups.csail.mit.edu/rrg/papers/ware_icra16.pdf
+
+Used simulation from
+https://github.com/ethz-asl/rotors_simulator
+to generate data, with gravity, atmosphere, etc. as on Titan
